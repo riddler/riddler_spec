@@ -1,0 +1,28 @@
+---
+name: liquid_element
+definition:
+  id: el_text
+  name: text
+  content_type: element
+  type: text
+  text: "Hello {{ params.name | default: 'USER' | downcase | split: ' ' | first | capitalize | append: '!'}}"
+
+tests:
+- name: with_no_context
+  result:
+    content_type: element
+    type: text
+    id: el_text
+    name: text
+    text: Hello User!
+
+- name: with_full_name_param
+  context:
+    params:
+      name: JOHN SMITH
+  result:
+    content_type: element
+    type: text
+    id: el_text
+    name: text
+    text: Hello John!
