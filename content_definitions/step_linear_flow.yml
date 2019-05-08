@@ -1,0 +1,180 @@
+---
+name: step_linear_flow
+definition:
+  id: st_01D6RPP0SQD9900
+  name: pokemon_search_flow
+  content_type: Step
+  type: LinearFlow
+  steps:
+  - id: st_01D6RPQEJCT6K01
+    name: pokemon_search
+    include_predicate: params.pokemon_name is blank
+    include_predicate_instructions: [["load", "params.pokemon_name"], ["blank"]]
+    content_type: Step
+    type: Input
+    elements:
+    - id: el_01D6RPRY3WRZ8W00
+      name: heading
+      content_type: Element
+      type: Heading
+      text: Pokemon Search
+    - id: el_01D6RPRY3WRZ8W01
+      name: text
+      content_type: Element
+      type: Text
+      text: Search for a pokemon by name and see if there are any results
+    - id: el_01D6RPRY3WRZ8W02
+      name: pokemon_name
+      content_type: Element
+      type: TextQuestion
+      text: Pokemon Name
+      validations:
+      - type: Required
+        message: required
+    - id: el_01D6RPRY3WRZ8W03
+      name: submit
+      content_type: Element
+      type: SubmitButton
+      text: Search
+  - id: st_01D6RPQEJCT0002
+    name: pokemon_results
+    content_type: Step
+    type: Variant
+    enter_actions:
+    - id: act_01D600000000
+      name: pokeapi_search
+      type: HttpGet
+      url: https://pokeapi.co/api/v2/pokemon/{{ responses.pokemon_name | default: params.pokemon_name }}/
+      assign_json_body_to: pokemon
+    steps:
+    - id: st_01D6RPQEJCT0001
+      name: pokemon_results
+      include_predicate: pokemon is present
+      include_predicate_instructions: [["load", "pokemon"], ["present"]]
+      content_type: Step
+      type: Input
+      elements:
+      - id: el_01D6RPRY3WRZ0000
+        name: Heading
+        content_type: Element
+        type: Heading
+        text: Search Results for '{{ responses.pokemon_name | default: params.pokemon_name }}'
+      - id: el_01D6RPRY3WRZ0001
+        name: text
+        content_type: Element
+        type: Text
+        text: There was a match! Continue on to see the raw output for {{ pokemon.name | capitalize }}!
+      - id: el_01D6RPRY3WRZ0002
+        name: submit
+        content_type: Element
+        type: SubmitButton
+        text: Continue
+    - id: st_01D6RPQEJCT0002
+      name: no_results
+      content_type: Step
+      type: Input
+      elements:
+      - id: el_01D6RPRY3WRZ0010
+        name: Heading
+        content_type: Element
+        type: Heading
+        text: No Results for '{{ responses.pokemon_name | default: params.pokemon_name }}'
+      - id: el_01D6RPRY3WRZ0011
+        name: text
+        content_type: Element
+        type: Text
+        text: Sorry - we didn't a find a pokemon with that name
+      - id: el_01D6RPRY3WRZ0012
+        name: submit
+        content_type: Element
+        type: SubmitButton
+        text: Continue
+  - id: st_01D6RPPS4000004
+    name: redirect
+    content_type: Step
+    type: Redirect
+    url: https://pokeapi.co/api/v2/pokemon/{{ responses.pokemon_name | default: params.pokemon_name }}/
+
+tests:
+- name: with_no_context
+  result:
+    id: st_01D6RPQEJCT6K01
+    name: pokemon_search
+    content_type: Step
+    type: Input
+    elements:
+    - id: el_01D6RPRY3WRZ8W00
+      name: heading
+      content_type: Element
+      type: Heading
+      text: Pokemon Search
+    - id: el_01D6RPRY3WRZ8W01
+      name: text
+      content_type: Element
+      type: Text
+      text: Search for a pokemon by name and see if there are any results
+    - id: el_01D6RPRY3WRZ8W02
+      name: pokemon_name
+      content_type: Element
+      type: TextQuestion
+      text: Pokemon Name
+      validations:
+      - type: Required
+        message: required
+    - id: el_01D6RPRY3WRZ8W03
+      name: submit
+      content_type: Element
+      type: SubmitButton
+      text: Search
+
+- name: with_pokemon_name_param
+  context:
+    params:
+      pokemon_name: 25
+  result:
+    id: st_01D6RPQEJCT0001
+    name: pokemon_results
+    content_type: Step
+    type: Input
+    elements:
+    - id: el_01D6RPRY3WRZ0000
+      name: Heading
+      content_type: Element
+      type: Heading
+      text: Search Results for '25'
+    - id: el_01D6RPRY3WRZ0001
+      name: text
+      content_type: Element
+      type: Text
+      text: There was a match! Continue on to see the raw output for Pikachu!
+    - id: el_01D6RPRY3WRZ0002
+      name: submit
+      content_type: Element
+      type: SubmitButton
+      text: Continue
+
+- name: with_invalid_pokemon_name_param
+  context:
+    params:
+      pokemon_name: nope
+  result:
+    id: st_01D6RPQEJCT0002
+    name: no_results
+    content_type: Step
+    type: Input
+    elements:
+    - id: el_01D6RPRY3WRZ0010
+      name: Heading
+      content_type: Element
+      type: Heading
+      text: No Results for 'nope'
+    - id: el_01D6RPRY3WRZ0011
+      name: text
+      content_type: Element
+      type: Text
+      text: Sorry - we didn't a find a pokemon with that name
+    - id: el_01D6RPRY3WRZ0012
+      name: submit
+      content_type: Element
+      type: SubmitButton
+      text: Continue
