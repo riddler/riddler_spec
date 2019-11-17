@@ -1,4 +1,4 @@
-# Riddler Tests
+# Riddler Spec
 
 These are shared test cases of how the Riddler engine shold work.
 
@@ -37,8 +37,7 @@ tests:
 
 With this example, we have one `definition` and two tests for it.
 
-The first requires the result to be a hash, and the `text` field to be just
-`Hello !`.
+The first requires the result to be a hash, and the `text` field to be `Hello !`.
 
 The second test adds a context with `params.name = "World"` and the field `text`
 should be `Hello World!`
