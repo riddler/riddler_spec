@@ -1,0 +1,11 @@
+---
+name: toggle_enabled
+definition:
+  id: ff_toggle_enabled
+  type: Toggle
+  name: ops_good_vendor
+  enabled: true
+
+tests:
+- name: with_no_context
+  result: true

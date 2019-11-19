@@ -1,0 +1,14 @@
+---
+name: toggle_context
+definition:
+  id: ff_toggle_hidden
+  type: Toggle
+  name: ops_bad_vendor
+  enabled: false
+  include_condition: feature.enabled
+  include_condition_instructions: [["load", "feature.enabled"], ["to_bool"]]
+
+tests:
+- name: with_no_context
+  # Should not be included - result should be nil
+  result:

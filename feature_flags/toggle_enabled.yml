@@ -1,0 +1,11 @@
+---
+name: toggle_disabled
+definition:
+  id: ff_toggle_disabled
+  type: Toggle
+  name: ops_iffy_vendor
+  enabled: false
+
+tests:
+- name: with_no_context
+  result: false

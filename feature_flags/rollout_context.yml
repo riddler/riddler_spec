@@ -1,0 +1,16 @@
+---
+name: rollout_context
+definition:
+  id: ff_rollout
+  type: Rollout
+  name: shiny_feature
+  enabled: true
+
+
+  include_condition: feature.enabled
+  include_condition_instructions: [["load", "feature.enabled"], ["to_bool"]]
+
+tests:
+- name: with_no_context
+  # Should not be included - result should be nil
+  result:
