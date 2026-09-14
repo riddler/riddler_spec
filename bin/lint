@@ -1,0 +1,91 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# The corpus lint. Ruby standard library only - no gems, no bundler, no
+# network. It is written to Ruby 2.6 syntax so it runs on a stock macOS
+# /usr/bin/ruby as well as on the 3.x series CI pins.
+#
+# It checks, and nothing else:
+#
+#   * every corpus/**/*.json and every schemas/*.json parses as JSON
+#   * every corpus case file is an object carrying "name", "capability",
+#     "generated_by" and "cases", where "cases" is an array
+#   * the case names inside one file are unique
+#   * every case is an object carrying "input" and "expected"
+#
+# On the first failure it prints the file path and the reason and exits 1.
+# Otherwise it prints a count of files and cases and exits 0. An empty
+# corpus is green: "0 files, 0 cases".
+
+require "json"
+
+ROOT = File.expand_path("..", __dir__)
+
+def fail_with(path, reason)
+  rel = path.sub(ROOT + File::SEPARATOR, "")
+  warn("#{rel}: #{reason}")
+  exit(1)
+end
+
+def parse_json(path)
+  JSON.parse(File.read(path))
+rescue JSON::ParserError => e
+  fail_with(path, "not valid JSON (#{e.message.split("\n").first})")
+end
+
+def check_case_file(path)
+  doc = parse_json(path)
+
+  unless doc.is_a?(Hash)
+    fail_with(path, "a case file must be a JSON object, got #{doc.class}")
+  end
+
+  %w[name capability generated_by cases].each do |key|
+    unless doc.key?(key)
+      fail_with(path, "a case file must carry #{key.inspect}")
+    end
+  end
+
+  cases = doc["cases"]
+  unless cases.is_a?(Array)
+    fail_with(path, "\"cases\" must be an array, got #{cases.class}")
+  end
+
+  seen = {}
+  cases.each_with_index do |kase, i|
+    unless kase.is_a?(Hash)
+      fail_with(path, "case #{i} must be a JSON object, got #{kase.class}")
+    end
+
+    name = kase["name"]
+    if name.nil?
+      fail_with(path, "case #{i} must carry \"name\"")
+    end
+
+    if seen.key?(name)
+      fail_with(path, "duplicate case name #{name.inspect} (cases #{seen[name]} and #{i})")
+    end
+    seen[name] = i
+
+    %w[input expected].each do |key|
+      unless kase.key?(key)
+        fail_with(path, "case #{name.inspect} must carry #{key.inspect}")
+      end
+    end
+  end
+
+  cases.length
+end
+
+corpus_files = Dir.glob(File.join(ROOT, "corpus", "**", "*.json")).sort
+schema_files = Dir.glob(File.join(ROOT, "schemas", "*.json")).sort
+
+schema_files.each { |path| parse_json(path) }
+
+case_count = 0
+corpus_files.each { |path| case_count += check_case_file(path) }
+
+file_count = corpus_files.length + schema_files.length
+
+puts("#{file_count} files, #{case_count} cases")
+exit(0)
