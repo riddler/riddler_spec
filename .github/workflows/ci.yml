@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Corpus lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      # bin/lint is standard-library Ruby with no gems and no bundler, so
+      # there is nothing to install and nothing to cache. It is written to
+      # Ruby 2.6 syntax (a stock macOS /usr/bin/ruby runs it locally) and is
+      # pinned here to the 3.3 series: CI is the second proof that it is
+      # green on both.
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+
+      - name: Corpus lint
+        run: ruby bin/lint

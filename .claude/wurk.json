@@ -1,0 +1,82 @@
+{
+  "wurk": 1,
+
+  "beads": {
+    "prefix": "rs",
+    "sync": "dolthub",
+    "topology": "beads",
+    "areas": {
+      "labels": [
+        "area:schema",
+        "area:corpus",
+        "area:docs",
+        "area:build"
+      ],
+      "lands_alone": ["area:build"],
+      "always_batchable": ["upstream"]
+    }
+  },
+
+  "forge": {
+    "kind": "github",
+    "labels": {}
+  },
+
+  "gate": {
+    "full": ["ruby", "bin/lint"],
+    "loop": ["ruby", "bin/lint"],
+    "report": ["ruby", "bin/lint"],
+    "attest": ["ruby", "bin/lint"],
+    "build_paths": ["corpus/", "schemas/", "bin/"],
+    "also_gated_paths": [],
+    "moving_files": [],
+    "sabotage": {
+      "test_roots": [],
+      "test_pattern": "\\btest\\s+\"",
+      "exempt_prefixes": []
+    },
+    "project_level_skips": [],
+    "not_applicable_skips": []
+  },
+
+  "parallelism": {
+    "model": "worktree-per-issue",
+    "worktrees_dir": "../riddler_spec-worktrees",
+    "trust": [],
+    "warm_clone": [],
+    "warm_globs": [],
+    "warm": [],
+    "repair_when": "",
+    "repair": [],
+    "post_branch": []
+  },
+
+  "tmux": {
+    "session": "riddler_spec",
+    "model": "opus"
+  },
+
+  "models": {
+    "direction": "fable"
+  },
+
+  "artifacts": {
+    "plans": "docs/plans",
+    "research": "docs/research",
+    "filename": "YYMMDD-[id-]kebab"
+  },
+
+  "commits": {
+    "style": "s-form",
+    "subject_under": 50,
+    "body_line_max": 72,
+    "total_lines_max": 40,
+    "trailer": {
+      "key": "Refs"
+    }
+  },
+
+  "changelog": {
+    "mode": "none"
+  }
+}
