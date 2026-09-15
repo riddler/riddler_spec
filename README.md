@@ -42,7 +42,7 @@ The files under `schemas/` are copied out of riddler-ex unchanged and carry no
 such header.
 
 The corpus is live, so the example below is a real case rather than a sketch of
-one: it is the first case of `corpus/elements/resolve.json`, named "Basic text:
+one: it is the first case of `corpus/screens/resolve.json`, named "Basic text:
 a template naming a response the visitor has not given renders as empty and the
 variable is reported", quoted from the file as it stands.
 
@@ -58,6 +58,7 @@ variable is reported", quoted from the file as it stands.
           "undecidable_conditions": []
         },
         "id": "edoc_signup_greeting",
+        "kind": "screens",
         "metadata": {},
         "schema_version": 1,
         "screens": [
@@ -102,7 +103,7 @@ variable is reported", quoted from the file as it stands.
 
 That file's header reads:
 
-    "generated_by": "riddler 0.1.0 from corpus/elements/resolve.json"
+    "generated_by": "riddler 0.1.0 from corpus/screens/resolve.json"
 
 Case `name`s are unique within a file. `input` and `expected` are whatever the
 capability's schema says they are; the schemas under `schemas/` are the

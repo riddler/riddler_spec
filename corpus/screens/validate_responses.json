@@ -1,5 +1,5 @@
 {
-  "capability": "elements.validate_responses",
+  "capability": "screens.validate_responses",
   "cases": [
     {
       "expected": {
@@ -1022,6 +1022,6 @@
       "name": "A screen the document does not declare is an error, not a set of responses that is fine"
     }
   ],
-  "generated_by": "riddler 0.1.0 from corpus/elements/validate_responses.json",
+  "generated_by": "riddler 0.1.0 from corpus/screens/validate_responses.json",
   "name": "Response validation: what a visitor's responses have to satisfy before a host accepts the screen"
 }
