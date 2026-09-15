@@ -25,38 +25,84 @@ case in riddler-ex, re-emit, open a pull request here with the emitted files.
 
 ## The case-file shape
 
-Every emitted file carries a `generated_by` header naming the riddler version
-and the source file it came from, so a reader can always find what produced it:
+Every emitted case file carries a `generated_by` header naming the riddler
+version and the source file it came from, so a reader can always find what
+produced it. Keys are sorted, as the emitter writes them:
 
     {
-      "name": "...",
       "capability": "...",
-      "generated_by": "riddler <version> from corpus/<capability>/<name>.exs",
       "cases": [
-        {"name": "...", "input": {...}, "expected": {...}}
-      ]
+        {"expected": {...}, "input": {...}, "name": "..."}
+      ],
+      "generated_by": "riddler <version> from corpus/<capability>/<name>.json",
+      "name": "..."
     }
 
-An illustrative example - **illustrative only**, not a real case; the first
-emitted corpus replaces it:
+The files under `schemas/` are copied out of riddler-ex unchanged and carry no
+such header.
+
+The corpus is live, so the example below is a real case rather than a sketch of
+one: it is the first case of `corpus/elements/resolve.json`, named "Basic text:
+a template naming a response the visitor has not given renders as empty and the
+variable is reported", quoted from the file as it stands.
 
     {
-      "name": "text_element",
-      "capability": "element",
-      "generated_by": "riddler 0.1.0 from corpus/element/text_element.exs",
-      "cases": [
-        {
-          "name": "renders a template against the context",
-          "input": {
-            "element": {"id": "el_text", "type": "text", "text": "Hello {{ name }}!"},
-            "context": {"name": "World"}
-          },
-          "expected": {
-            "element": {"id": "el_text", "type": "text", "text": "Hello World!"}
+      "expected": {
+        "diagnostics": {
+          "missing_variables": [
+            {
+              "key": "account_greeting",
+              "variable": "responses.first_name"
+            }
+          ],
+          "undecidable_conditions": []
+        },
+        "id": "edoc_signup_greeting",
+        "metadata": {},
+        "schema_version": 1,
+        "screens": [
+          {
+            "key": "account",
+            "nodes": [
+              {
+                "key": "account_greeting",
+                "text": "Hello !",
+                "type": "text"
+              }
+            ],
+            "title": "Create your account"
           }
+        ]
+      },
+      "input": {
+        "document": {
+          "id": "edoc_signup_greeting",
+          "schema_version": 1,
+          "screens": [
+            {
+              "key": "account",
+              "nodes": [
+                {
+                  "key": "account_greeting",
+                  "text": "Hello {{ responses.first_name }}!",
+                  "type": "text"
+                }
+              ],
+              "title": "Create your account"
+            }
+          ]
+        },
+        "root": {
+          "context": {},
+          "responses": {}
         }
-      ]
+      },
+      "name": "Basic text: a template naming a response the visitor has not given renders as empty and the variable is reported"
     }
+
+That file's header reads:
+
+    "generated_by": "riddler 0.0.1 from corpus/elements/resolve.json"
 
 Case `name`s are unique within a file. `input` and `expected` are whatever the
 capability's schema says they are; the schemas under `schemas/` are the
