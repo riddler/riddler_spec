@@ -605,6 +605,6 @@
       "name": "A value carrying markup renders as the literal characters of that markup, in both modes"
     }
   ],
-  "generated_by": "riddler 0.0.1 from corpus/templates/render.json",
+  "generated_by": "riddler 0.1.0 from corpus/templates/render.json",
   "name": "The template subset: what compiles, what is refused, and what the two render modes do"
 }

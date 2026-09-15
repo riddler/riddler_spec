@@ -102,7 +102,7 @@ variable is reported", quoted from the file as it stands.
 
 That file's header reads:
 
-    "generated_by": "riddler 0.0.1 from corpus/elements/resolve.json"
+    "generated_by": "riddler 0.1.0 from corpus/elements/resolve.json"
 
 Case `name`s are unique within a file. `input` and `expected` are whatever the
 capability's schema says they are; the schemas under `schemas/` are the
