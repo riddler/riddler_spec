@@ -1622,6 +1622,6 @@
       "name": "The whole signup wizard against a visitor who has answered nothing keeps the envelope and every screen in order, and reports each condition it could not decide"
     }
   ],
-  "generated_by": "riddler 0.0.1 from corpus/elements/resolve.json",
+  "generated_by": "riddler 0.1.0 from corpus/elements/resolve.json",
   "name": "Resolution: an element document against one visitor's context and responses"
 }

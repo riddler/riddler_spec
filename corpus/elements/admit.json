@@ -709,6 +709,6 @@
       "name": "An unconditional candidate that is not last is refused, because it buries every candidate after it"
     }
   ],
-  "generated_by": "riddler 0.0.1 from corpus/elements/admit.json",
+  "generated_by": "riddler 0.1.0 from corpus/elements/admit.json",
   "name": "Admission: what makes a value an element document, and every reason a document is refused"
 }
