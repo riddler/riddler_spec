@@ -96,8 +96,12 @@ An agent may draft the change; it does not adopt it.
   `mix riddler.corpus` emits them. Nothing under `corpus/` or `schemas/` is
   edited by hand; the emitter in riddler-ex is the only writer.
 - The vocabulary is `writes`, `outcome`, `responses` and `context`. The
-  spellings `payload`, `action` and `answers` are wrong everywhere: in a case
-  file, in a schema, in a README, in a bead.
+  spellings `payload`, `action` and `answers` are retired. **The rule is
+  about vocabulary, not about the English language**: a retired spelling
+  must not appear as a key, a field name, a value, a case name, or any
+  other identifier - in a case file, in a schema, in a README, on a bead.
+  **A case name is vocabulary.** Ordinary English prose is exempt,
+  including the verb "answers".
 - Examples and fixtures use the family's two canonical domains - a
   multi-tenant host app doing credit-card processing, and a signup wizard -
   and no others.
