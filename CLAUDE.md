@@ -46,7 +46,7 @@ irreversible step, and report.
 |---|---|---|
 | `bd` task tracking (`create`, `claim`, `update`, `note`) | any time | never - this is the conservative profile too |
 | `ruby bin/lint` in any profile | any time | never - running the gate costs nothing but time |
-| `git commit` on the bead's branch | a campaign carrying the operator's explicit consent **and** the bead's work complete **and** full `ruby bin/lint` green; a change touching no Elixir code and no path in `gate.also_gated_paths` has no gate to run and may commit on review of the diff alone | on `main`, on a red gate, on a `--profile loop` or otherwise scoped run, or with unrelated changes in the tree |
+| `git commit` on the bead's branch | a campaign carrying the operator's explicit consent **and** the bead's work complete **and** full `ruby bin/lint` green; a change touching any path in `gate.build_paths` (`corpus/`, `schemas/`, `bin/`) runs the full `ruby bin/lint`; only a change confined to `CLAUDE.md`, `README.md` or `.beads/` is docs-only and may commit on review of the diff alone | on `main`, on a red gate, on a `--profile loop` or otherwise scoped run, or with unrelated changes in the tree |
 | `git push`, `gh pr create` | the same consent, **and** the terminology scan in the umbrella's `docs/terminology-firewall.md` clean over the full outbound content | any scan hit - that is a hard stop, not something to rephrase past |
 | merging a campaign PR | a campaign consent the operator adopted verbatim that names automatic merges, with every named condition met (full gate green, CI green, firewall scan clean with a positive control, any named review gate passed) | outside such a consent; any named condition unmet; any PR the consent's carve-outs hold for the operator |
 | `bd close <id>` | never for a mirrored bead whose other half is not merged to its own repo's `origin/main`; a mirrored bead whose other half has ALSO landed may be closed by the campaign conductor under a consent naming this exception, both halves together, each verified against its remote; otherwise the operator's call | for a bead whose description carries a `mirrors:` line while its other half is unlanded, campaign consent included |
@@ -72,11 +72,10 @@ What has to be quotable is the relay - the operator's own words authorizing
 that campaign, not the subagent's sense of being authorized. A subagent that
 cannot quote them reports and stops. A relay unlocks nothing the rows above
 forbid outright: closing a mirrored bead, and tagging, publishing or
-cutting a release stay forbidden however the consent arrives. The release-prep
-request in the row above is the one named exception, and it is narrow: a
-version bump and a changelog promotion with no tag, opened and landed only
-under a campaign's own explicit consent clause naming it, with the tag and the
-publish that follow still the operator's.
+cutting a release stay forbidden however the consent arrives. There is no
+release-prep exception here: the row above reads "never" in both columns
+because this repo has no release. No relay, and no campaign consent, unlocks a
+version bump, a changelog promotion, a tag or a publish in this repo.
 
 Merging a campaign PR is a recorded exception: under a campaign consent the
 operator has adopted verbatim that names automatic merges, with every
