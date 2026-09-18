@@ -388,14 +388,7 @@
     },
     {
       "expected": {
-        "findings": [
-          {
-            "code": "response.format",
-            "field": "pattern",
-            "node_key": "card_last_four"
-          }
-        ],
-        "ok": false
+        "ok": true
       },
       "input": {
         "document": {
@@ -423,7 +416,7 @@
         },
         "screen": "card"
       },
-      "name": "A pattern no runtime can use is a finding against the question, because nothing could satisfy it"
+      "name": "A pattern no runtime can use is a finding against the document, so a response is not held to it as well"
     },
     {
       "expected": {
@@ -1020,8 +1013,224 @@
         "screen": "billing"
       },
       "name": "A screen the document does not declare is an error, not a set of responses that is fine"
+    },
+    {
+      "expected": {
+        "findings": [
+          {
+            "code": "response.undecidable",
+            "field": "condition",
+            "node_key": "company"
+          }
+        ],
+        "ok": false
+      },
+      "input": {
+        "document": {
+          "id": "edoc_plan_seats",
+          "schema_version": 1,
+          "screens": [
+            {
+              "key": "plan",
+              "nodes": [
+                {
+                  "condition": "responses.seats > 1",
+                  "key": "company",
+                  "label": "Company name",
+                  "required": true,
+                  "type": "text_question"
+                }
+              ],
+              "title": "Your plan"
+            }
+          ]
+        },
+        "responses": {},
+        "screen": "plan"
+      },
+      "name": "A condition the root cannot decide is a finding, not a silent pass: the question is neither held to its requirement nor let through"
+    },
+    {
+      "expected": {
+        "findings": [
+          {
+            "code": "response.required",
+            "field": "required",
+            "node_key": "vat_id"
+          }
+        ],
+        "ok": false
+      },
+      "input": {
+        "context": {
+          "is_business": true
+        },
+        "document": {
+          "id": "edoc_business_details",
+          "schema_version": 1,
+          "screens": [
+            {
+              "key": "details",
+              "nodes": [
+                {
+                  "key": "full_name",
+                  "label": "Your name",
+                  "required": true,
+                  "type": "text_question"
+                },
+                {
+                  "condition": "context.is_business == true",
+                  "key": "vat_id",
+                  "label": "VAT number",
+                  "required": true,
+                  "type": "text_question"
+                }
+              ],
+              "title": "Your details"
+            }
+          ]
+        },
+        "responses": {
+          "full_name": "Ada Lovelace"
+        },
+        "screen": "details"
+      },
+      "name": "A required question the context shows and the visitor left blank is a finding, because validation reads the context the host handed in"
+    },
+    {
+      "expected": {
+        "ok": true
+      },
+      "input": {
+        "context": {
+          "is_business": false
+        },
+        "document": {
+          "id": "edoc_business_details",
+          "schema_version": 1,
+          "screens": [
+            {
+              "key": "details",
+              "nodes": [
+                {
+                  "key": "full_name",
+                  "label": "Your name",
+                  "required": true,
+                  "type": "text_question"
+                },
+                {
+                  "condition": "context.is_business == true",
+                  "key": "vat_id",
+                  "label": "VAT number",
+                  "required": true,
+                  "type": "text_question"
+                }
+              ],
+              "title": "Your details"
+            }
+          ]
+        },
+        "responses": {
+          "full_name": "Ada Lovelace"
+        },
+        "screen": "details"
+      },
+      "name": "The same question the same context hides cannot fail, blank or not, because the context validation reads is that one and not an empty one"
+    },
+    {
+      "expected": {
+        "ok": true
+      },
+      "input": {
+        "document": {
+          "id": "edoc_seat_review",
+          "schema_version": 1,
+          "screens": [
+            {
+              "key": "seats",
+              "nodes": [
+                {
+                  "condition": "context.plan_tier == \"team\"",
+                  "key": "team_name",
+                  "label": "Team name",
+                  "required": true,
+                  "type": "text_question"
+                },
+                {
+                  "key": "seats_back",
+                  "label": "Back",
+                  "outcome": "went_back",
+                  "type": "button",
+                  "validates": false
+                },
+                {
+                  "key": "seats_continue",
+                  "label": "Continue",
+                  "outcome": "continued",
+                  "type": "button"
+                }
+              ],
+              "title": "Your seats"
+            }
+          ]
+        },
+        "pressed_button": "seats_back",
+        "responses": {},
+        "screen": "seats"
+      },
+      "name": "A button declaring that it does not validate responses is let through even where a condition the root cannot decide sits on the screen, because a host's defect is not the visitor's to be held by"
+    },
+    {
+      "expected": {
+        "findings": [
+          {
+            "code": "response.undecidable",
+            "field": "condition",
+            "node_key": "team_name"
+          }
+        ],
+        "ok": false
+      },
+      "input": {
+        "document": {
+          "id": "edoc_seat_review",
+          "schema_version": 1,
+          "screens": [
+            {
+              "key": "seats",
+              "nodes": [
+                {
+                  "condition": "context.plan_tier == \"team\"",
+                  "key": "team_name",
+                  "label": "Team name",
+                  "required": true,
+                  "type": "text_question"
+                },
+                {
+                  "key": "seats_back",
+                  "label": "Back",
+                  "outcome": "went_back",
+                  "type": "button",
+                  "validates": false
+                },
+                {
+                  "key": "seats_continue",
+                  "label": "Continue",
+                  "outcome": "continued",
+                  "type": "button"
+                }
+              ],
+              "title": "Your seats"
+            }
+          ]
+        },
+        "pressed_button": "seats_continue",
+        "responses": {},
+        "screen": "seats"
+      },
+      "name": "The validating button on that same screen returns the finding the root could not decide"
     }
   ],
-  "generated_by": "riddler 0.1.0 from corpus/screens/validate_responses.json",
+  "generated_by": "riddler from corpus/screens/validate_responses.json",
   "name": "Response validation: what a visitor's responses have to satisfy before a host accepts the screen"
 }
