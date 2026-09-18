@@ -1,3 +1,13 @@
+# This repository is archived
+
+The conformance corpus is authored and versioned in
+[riddler-ex](https://github.com/riddler/riddler-ex), under `corpus/` and
+`priv/schemas/` there. A runtime in a second language vendors the corpus from
+a riddler-ex tag, not from this repository.
+
+Nothing is emitted here again. The corpus and schemas in this repository are
+the last sync, from riddler-ex at `c05df20`.
+
 # riddler_spec
 
 The language-neutral conformance corpus for [Riddler](https://github.com/riddler):

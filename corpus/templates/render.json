@@ -565,6 +565,22 @@
     },
     {
       "expected": {
+        "compiled": false,
+        "findings": [
+          {
+            "code": "template.tag_not_allowed",
+            "field": "endif",
+            "node_key": null
+          }
+        ]
+      },
+      "input": {
+        "source": "done{% endif %}"
+      },
+      "name": "A stray closing tag is refused as a tag outside the subset, not as a parse error: a parse failure naming a tag is reported as that tag"
+    },
+    {
+      "expected": {
         "compiled": true,
         "missing": [
           "responses.first_name"
@@ -599,6 +615,43 @@
         "source": "Nice to meet you, {{ responses.first_name }}."
       },
       "name": "Strict mode returns the same variable as an error instead of rendering"
+    },
+    {
+      "expected": {
+        "compiled": true,
+        "missing": [
+          "responses.invitees"
+        ],
+        "rendered": true,
+        "text": ""
+      },
+      "input": {
+        "assigns": {
+          "context": {},
+          "responses": {}
+        },
+        "mode": "lenient",
+        "source": "{% for invitee in responses.invitees %}{{ invitee }};{% endfor %}"
+      },
+      "name": "Lenient mode renders a for tag over a collection the root does not carry as nothing and names the operand"
+    },
+    {
+      "expected": {
+        "compiled": true,
+        "missing": [
+          "responses.invitees"
+        ],
+        "rendered": false
+      },
+      "input": {
+        "assigns": {
+          "context": {},
+          "responses": {}
+        },
+        "mode": "strict",
+        "source": "{% for invitee in responses.invitees %}{{ invitee }};{% endfor %}"
+      },
+      "name": "Strict mode returns the same iteration operand as an error instead of rendering: strict mode covers the iteration position as well as the output position"
     },
     {
       "expected": {
@@ -641,6 +694,42 @@
         "compiled": true,
         "missing": [],
         "rendered": true,
+        "text": "Write {% liquid %} and this screen refuses it."
+      },
+      "input": {
+        "assigns": {
+          "context": {},
+          "responses": {}
+        },
+        "mode": "both",
+        "source": "{{ 'Write {% liquid %} and this screen refuses it.' }}"
+      },
+      "name": "A refused tag's characters inside a string literal render as those characters in both modes: the exemption is the parse tree's, not the source's"
+    },
+    {
+      "expected": {
+        "compiled": true,
+        "missing": [],
+        "rendered": true,
+        "text": "the characters of a refused tag"
+      },
+      "input": {
+        "assigns": {
+          "context": {},
+          "responses": {
+            "{% liquid %}": "the characters of a refused tag"
+          }
+        },
+        "mode": "both",
+        "source": "{{ responses[\"{% liquid %}\"] }}"
+      },
+      "name": "A refused tag's characters inside a bracket subscript are a key, not a tag: the subscript reads the value under that key in both modes"
+    },
+    {
+      "expected": {
+        "compiled": true,
+        "missing": [],
+        "rendered": true,
         "text": "Tell me about updates."
       },
       "input": {
@@ -668,7 +757,7 @@
         "mode": "both",
         "source": "{% if context.beta_enabled and responses.plan == 'business' %}Beta{% elsif responses.plan == 'personal' %}Personal{% else %}Standard{% endif %}"
       },
-      "name": "A path the root does not carry inside an if or elsif condition, compared and chained with and, is missing in neither mode"
+      "name": "A path the root does not carry is missing in neither mode inside an if condition chained with and, nor inside a bare elsif comparison"
     },
     {
       "expected": {
@@ -724,6 +813,43 @@
         "source": "{% assign greeted = responses.first_name %}Nice to meet you, {{ greeted }}."
       },
       "name": "An assign right-hand side the root does not carry is still reported in strict mode: it reads a value rather than testing one"
+    },
+    {
+      "expected": {
+        "compiled": true,
+        "missing": [
+          "responses.newsletter"
+        ],
+        "rendered": true,
+        "text": "Newsletter: "
+      },
+      "input": {
+        "assigns": {
+          "context": {},
+          "responses": {}
+        },
+        "mode": "lenient",
+        "source": "{% capture line %}Newsletter: {{ responses.newsletter }}{% endcapture %}{{ line }}"
+      },
+      "name": "A capture right-hand side the root does not carry is named in lenient mode, and the captured text still renders where it is output"
+    },
+    {
+      "expected": {
+        "compiled": true,
+        "missing": [
+          "responses.newsletter"
+        ],
+        "rendered": false
+      },
+      "input": {
+        "assigns": {
+          "context": {},
+          "responses": {}
+        },
+        "mode": "strict",
+        "source": "{% capture line %}Newsletter: {{ responses.newsletter }}{% endcapture %}{{ line }}"
+      },
+      "name": "A capture right-hand side the root does not carry is still reported in strict mode: a capture body reads a value rather than testing one"
     }
   ],
   "generated_by": "riddler from corpus/templates/render.json",
