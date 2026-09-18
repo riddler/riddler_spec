@@ -798,6 +798,6 @@
       "name": "A kind no runtime knows is refused, naming the kind and no node"
     }
   ],
-  "generated_by": "riddler 0.1.0 from corpus/screens/admit.json",
+  "generated_by": "riddler from corpus/screens/admit.json",
   "name": "Admission: what makes a value a screen document, and every reason a document is refused"
 }
